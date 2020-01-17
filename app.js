@@ -2,11 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const feedRoutes = require('./routes/feed')
-// const db = require('./config/database')
+const db = require('./config/database')
 
-// db.authenticate()
-//     .then(() => console.log('database connected...'))
-//     .catch(err => console.log('error:'+err));
+db.authenticate()
+    .then(() => console.log('database connected...'))
+    .catch(err => console.log('error:'+err));
 
 
 const app = express();
@@ -26,7 +26,11 @@ app.use((req, res, next)=>{
 
 app.use('/api', feedRoutes)
 
-// db
+db
+  .sync({logging:false})  
+    .catch(err=>{
+    console.log(err)
+  })
 //   .sync({logging:true}) //force in dev
 //   .then(result =>{
     
