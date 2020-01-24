@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const feedRoutes = require('./routes/feed')
+const authRoutes = require('./routes/auth')
 const db = require('./config/database')
 
 db.authenticate()
@@ -25,9 +26,18 @@ app.use((req, res, next)=>{
 
 
 app.use('/api', feedRoutes)
+app.use('/auth', authRoutes)
+
+app.use((error, req, res, next) => {
+  console.log(error)
+  const status = error.statusCode || 500;
+  const message = error.message 
+  const data = error.data 
+  res.status(status).json({message:message, data:data})
+})
 
 db
-  .sync({logging:false})  
+  .sync({logging:console.log})  
     .catch(err=>{
     console.log(err)
   })
