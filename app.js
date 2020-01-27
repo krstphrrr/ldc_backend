@@ -1,13 +1,15 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const feedRoutes = require('./routes/feed')
 const authRoutes = require('./routes/auth')
 const db = require('./config/database')
 
+
 db.authenticate()
     .then(() => console.log('database connected...'))
-    .catch(err => console.log('error:'+err));
+    .catch(err => console.log('error:'+ err));
 
 
 const app = express();
@@ -23,10 +25,14 @@ app.use((req, res, next)=>{
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization')
   next()
 })
+// move later into  utils so routes can be 
+// guarded with authCheck by just importing
+
+// or set it at locals!
 
 
-app.use('/api', feedRoutes)
 app.use('/auth', authRoutes)
+app.use('/api', feedRoutes)
 
 app.use((error, req, res, next) => {
   console.log(error)
@@ -37,17 +43,9 @@ app.use((error, req, res, next) => {
 })
 
 db
-  .sync({logging:console.log})  
+  .sync({logging:false})  
     .catch(err=>{
     console.log(err)
   })
-//   .sync({logging:true}) //force in dev
-//   .then(result =>{
-    
-//     const server = app.listen(process.env.PORT || 5000)
 
-//     })
-//   .catch(err =>{
-//     console.log(err)
-//   })
 app.listen(process.env.PORT || 5000)

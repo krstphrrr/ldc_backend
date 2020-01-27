@@ -2,6 +2,8 @@ const express = require('express')
 const plotController = require('../controllers/plots')
 const feedController = require('../controllers/feed')
 const router = express.Router()
+// const authCheck = require('../app')
+
 // plotController.getPlots
 
 // GET /api/plots
