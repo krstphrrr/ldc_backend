@@ -22,7 +22,7 @@ exports.getPlots = (req, res, next) =>{
       offset:currentPage * pageSize,
       
       where:{ 
-        // PlotID: "Mal-389"
+        // USE DATA
       }
       
     }).then(document =>{

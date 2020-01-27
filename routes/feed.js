@@ -8,7 +8,7 @@ const router = express.Router()
 
 // GET /api/plots
 router.get('/posts', feedController.getPosts)
-
+router.get('/test', feedController.socketTest)
 // POST 
 
 router.post('/post', feedController.createPost)

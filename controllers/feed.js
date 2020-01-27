@@ -31,3 +31,23 @@ exports.createPost = (req, res, next) => {
   createdAt:new Date()}
   })
 }
+
+exports.socketTest = (req, res, next) => {
+  console.log('llego alguien')
+  let io = req.app.get('socketio')
+
+  io.on('connection', (socket)=>{
+      console.log('you are connected')
+
+      socket.on('disconnect', function(){
+        console.log('user disconnected');
+      });
+      
+      socket.emit('test event', 'here is some data')
+      socket.on('test2', (data)=>{
+        console.log(data)
+      })
+    })
+
+
+}
