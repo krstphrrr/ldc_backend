@@ -1,3 +1,4 @@
+
 exports.getPosts = (req, res, next) => {
   res.status(200).json({
     posts:[
@@ -34,20 +35,23 @@ exports.createPost = (req, res, next) => {
 
 exports.socketTest = (req, res, next) => {
   console.log('llego alguien')
-  let io = req.app.get('socketio')
 
-  io.on('connection', (socket)=>{
-      console.log('you are connected')
+  // let io = req.app.get('socketio')
+  const io = require('../socket')
 
-      socket.on('disconnect', function(){
-        console.log('user disconnected');
-      });
+  io.getIO().on('test2', message=>{
+    console.log(message)
+  })
+  io.getIO().emit('test event', 'ok')
+  //     console.log('you are connected')
+
+  //     socket.on('disconnect', function(){
+  //       console.log('user disconnected');
+  //     });
       
-      socket.emit('test event', 'here is some data')
-      socket.on('test2', (data)=>{
-        console.log(data)
-      })
-    })
-
-
+  //     socket.emit('test event', 'here is some data')
+  //     socket.on('test2', (data)=>{
+  //       console.log(data)
+  //     })
+  //   })
 }

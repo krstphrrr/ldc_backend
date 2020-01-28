@@ -1,4 +1,6 @@
 const Header = require('../models/dataHeader')
+const GeoInd = require('../models/geoIndicators')
+const GeoSpe = require('../models/geoSpecies')
 
 const paginate = ({ page, pageSize }) => {
   const offset = page * pageSize;
@@ -41,5 +43,51 @@ exports.getPlots = (req, res, next) =>{
         console.log(err)
       })
   }
-  
+}
+
+exports.getGeoInd = (req, res, next)=>{
+  // let paramsArray = req.params
+  // needs an array of filters in req, first pull are all public 
+  // later observables will filter and re-pull with modified filter array
+  // 
+  Header.findOne({
+    include:[
+      {
+        model:GeoInd, 
+        where:{
+          Public:true
+        }
+      }
+    ],
+    where:{
+      // Public:true
+    }
+  })
+    .then(
+    data =>{
+      res.status(200).json(data)
+    })
+//   .then()
+//   .catch(err => {
+//   console.log(err)
+// })
+  // headerGeo.then(data=>console.log(data))
+
+  // const model = Header
+  //   for (let assoc of Object.keys(model.associations)) {
+  //     for (let accessor of Object.keys(model.associations[assoc].accessors)) {
+  //       console.log(model.name + '.' + model.associations[assoc].accessors[accessor]+'()');
+  //     }
+  //   }
+  // H.getGeoIndicators().then(data=>{console.log(data)})
+
+
+//  console.log(headerGeo)
+  // const geoHeader = headerGeo.getGeoIndicators()
+  // console.log(geoHeader)
+  //   .then(data=>console.log(data))
+  // geoHeader
+  //   .then(data =>{
+  //     console.log(data.wkbGeometry)
+  //   })
 }

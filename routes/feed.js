@@ -15,4 +15,6 @@ router.post('/post', feedController.createPost)
 // dev get
 
 router.get('/plots', plotController.getPlots)
+router.get('/plots2', plotController.getGeoInd)
+
 module.exports = router

@@ -2,12 +2,18 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
+
+// routes + sequelize 
 const feedRoutes = require('./routes/feed')
 const authRoutes = require('./routes/auth')
 const db = require('./config/database')
 
+//models
+const Header = require('./models/dataHeader')
+const GeoInd = require('./models/geoIndicators')
+const GeoSpe = require('./models/geoSpecies')
 
-
+// sequelize set up
 db.authenticate()
     .then(() => console.log('database connected...'))
     .catch(err => console.log('error:'+ err));
@@ -29,10 +35,21 @@ app.use((req, res, next)=>{
 
 
 
-
+// routes (controllers within)
 app.use('/auth', authRoutes)
 app.use('/api', feedRoutes)
 
+// model relationships!
+Header.hasMany(GeoInd, {
+  foreignKey: "PrimaryKey"
+})
+Header.hasMany(GeoSpe,{
+  foreignKey: "PrimaryKey"
+})
+
+
+
+// error handler
 app.use((error, req, res, next) => {
   console.log(error)
   const status = error.statusCode || 500;
@@ -41,26 +58,18 @@ app.use((error, req, res, next) => {
   res.status(status).json({message:message, data:data})
 })
 
+
+// webserver set up + associating with socket
 db
   .sync({logging:false})  
     .catch(err=>{
     console.log(err)
   }).then(result =>{
       const server = app.listen(process.env.PORT || 5000)
-      const socketio = require('socket.io')
-      const io = socketio(server)
-      // app.set('socketio',io)
-      io.on('connection', (socket)=>{
-        console.log('you are connected')
-  
-        socket.on('disconnect', function(){
-          console.log('user disconnected');
-        });
-        
-        socket.emit('test event', 'here is some data')
-        socket.on('test2', (data)=>{
-          console.log(data)
-        })
+      const io = require('./socket').init(server)
+      io.on('connection', socket=>{
+        console.log('connected!')
+        socket.on('test3',message=>console.log(message))
       })
-    })
+  })
 // app.listen(process.env.PORT || 5000)
