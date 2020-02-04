@@ -1,6 +1,8 @@
 const Header = require('../models/dataHeader')
 const GeoInd = require('../models/geoIndicators')
 const GeoSpe = require('../models/geoSpecies')
+// const db = require('./config/database')
+const Sequelize = require('sequelize')
 
 const paginate = ({ page, pageSize }) => {
   const offset = page * pageSize;
@@ -50,23 +52,27 @@ exports.getGeoInd = (req, res, next)=>{
   // needs an array of filters in req, first pull are all public 
   // later observables will filter and re-pull with modified filter array
   // 
-  Header.findOne({
+
+  const test = Header.findAll({
     include:[
       {
-        model:GeoInd, 
+        model:GeoInd,
         where:{
           Public:true
         }
       }
     ],
+    limit:100,
     where:{
       // Public:true
     }
   })
-    .then(
-    data =>{
-      res.status(200).json(data)
+  // test.getGeoIndicators()
+    // 
+    .then((data)=>{
+     res.status(200).json(data)
     })
+    
 //   .then()
 //   .catch(err => {
 //   console.log(err)

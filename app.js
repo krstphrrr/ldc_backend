@@ -1,6 +1,9 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+// get rid of
+// const { GraphQLSchema } = require('graphql');
+const graphqlHttp = require('express-graphql')
 
 
 // routes + sequelize 
@@ -8,18 +11,27 @@ const feedRoutes = require('./routes/feed')
 const authRoutes = require('./routes/auth')
 const db = require('./config/database')
 
+
+
 //models
 const Header = require('./models/dataHeader')
 const GeoInd = require('./models/geoIndicators')
 const GeoSpe = require('./models/geoSpecies')
 
-// sequelize set up
+// // sequelize set up
 db.authenticate()
     .then(() => console.log('database connected...'))
     .catch(err => console.log('error:'+ err));
 
-
+   
 const app = express();
+
+
+
+
+
+
+
 
 app.use(bodyParser.json()) //app/json headerss
 
@@ -43,10 +55,16 @@ app.use('/api', feedRoutes)
 Header.hasMany(GeoInd, {
   foreignKey: "PrimaryKey"
 })
-Header.hasMany(GeoSpe,{
+GeoInd.belongsTo(Header,{
   foreignKey: "PrimaryKey"
 })
 
+Header.hasMany(GeoSpe,{
+  foreignKey: "PrimaryKey"
+})
+GeoSpe.belongsTo(Header,{
+  foreignKey: "PrimaryKey"
+})
 
 
 // error handler
@@ -57,6 +75,7 @@ app.use((error, req, res, next) => {
   const data = error.data 
   res.status(status).json({message:message, data:data})
 })
+
 
 
 // webserver set up + associating with socket
