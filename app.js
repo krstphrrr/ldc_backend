@@ -77,6 +77,7 @@ app.use((error, req, res, next) => {
 })
 
 
+const{ QueryTypes } = require('sequelize')
 
 // webserver set up + associating with socket
 db
@@ -89,6 +90,56 @@ db
       io.on('connection', socket=>{
         console.log('connected!')
         socket.on('test3',message=>console.log(message))
+
+        socket.on('fetchpoints', tmpData=>{
+          // tmpBounds
+          let whereResults;
+          let whereQuery = db.query(
+              'SELECT "ogc_fid", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
+          + tmpData.bounds._southWest.lng + ', '  
+          + tmpData.bounds._southWest.lat + ', ' 
+          + tmpData.bounds._northEast.lng + ', ' 
+          + tmpData.bounds._northEast.lat + ", 4326)) = 't' LIMIT 500;",{
+              nest:true,
+              logging:console.log,
+              type:QueryTypes.SELECT,
+              raw:true
+            }).then(points=>{
+              let resList = []
+              let tmpKeys
+              let tmpJSON = {"type":"FeatureCollection", "features":[]}
+              for(let i in points){
+                resList.push(points[i])
+                if(points[i]){
+
+                  
+                  tmpKeys = Object.keys(points[i])
+                  resList.forEach(row=>{
+                    tmpProps = {}
+                    tmpKeys.forEach(key=>{
+                      tmpProps[key] = row[key]
+                    })
+                    // console.log(row)
+                    tmpJSON.features.push({
+                      "type":"Feature",
+                      "id":row.ogc_fid, 
+                      "properties": tmpProps,
+                      "geometry":row.wkb_geometry})
+                    // console.log(tmpJSON)
+                    
+                  })
+                  // console.log(points[i])
+                  
+                }
+                
+              }
+              // console.log()
+              // console.log(JSON.stringify(points))
+              // socket.emit('pointssend', points)
+              socket.emit('pointssend', tmpJSON)
+
+            })
+        })
       })
   })
 // app.listen(process.env.PORT || 5000)

@@ -97,3 +97,36 @@ exports.getGeoInd = (req, res, next)=>{
   //     console.log(data.wkbGeometry)
   //   })
 }
+
+exports.testGeo = (req, res, next)=>{
+  let envelope = 
+    Sequelize.fn("json_build_object",
+      Sequelize.literal("'type'"), Sequelize.literal("'FeatureCollection'"),
+      Sequelize.literal("'features'"),
+        Sequelize.fn('json_agg',
+        
+          Sequelize.fn("ST_AsGeoJSON", Sequelize.literal('"wkb_geometry"')) ))
+  GeoInd.findAll({
+    raw:true,
+    logging:console.log,
+    limit:1,
+    attributes:[envelope]
+  })
+    .then(result=>{
+      console.log(result[0])
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+}
+`
+'SELECT "wkb_geometry" 
+from "geoIndicators" a 
+WHERE ST_Intersects(
+  a.wkb_geometry, 
+  ST_MakeEnvelope(' + 
+  tmpData.bounds._southWest.lng + ', '  + 
+  tmpData.bounds._southWest.lat + ', ' + 
+  tmpData.bounds._northEast.lng + ', ' + 
+  tmpData.bounds._northEast.lat + ", 4326)) = 't';"
+`
