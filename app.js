@@ -95,7 +95,7 @@ db
           // tmpBounds
           let whereResults;
           let whereQuery = db.query(
-              'SELECT "ogc_fid", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
+              'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
           + tmpData.bounds._southWest.lng + ', '  
           + tmpData.bounds._southWest.lat + ', ' 
           + tmpData.bounds._northEast.lng + ', ' 
