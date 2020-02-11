@@ -27,6 +27,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.6.2",
     "knex": "^0.20.8",
+    "node-version": "^2.0.0",
     "pg": "^7.18.1",
     "sequelize": "^5.21.3",
     "sequelize-graphql-schema": "^0.1.71",
