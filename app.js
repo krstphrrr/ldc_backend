@@ -96,6 +96,7 @@ db
           let existingIds = new Set()
           let whereResults;
           let whereQuery = db.query(
+            
               'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
           + tmpData.bounds._southWest.lng + ', '  
           + tmpData.bounds._southWest.lat + ', ' 
@@ -250,6 +251,67 @@ db
 
             })
           }
+
+          socket.on('fetchpoints', tmpData=>{
+          // tmpBounds
+          let existingIds = new Set()
+          let whereResults;
+          let whereQuery = db.query(
+              'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
+          + tmpData.bounds._southWest.lng + ', '  
+          + tmpData.bounds._southWest.lat + ', ' 
+          + tmpData.bounds._northEast.lng + ', ' 
+          + tmpData.bounds._northEast.lat + ", 4326)) = 't' AND \"Public\"= true;",{
+              nest:true,
+              logging:console.log,
+              type:QueryTypes.SELECT,
+              raw:true
+            }).then(points=>{
+              let resList = []
+              let tmpKeys
+              let tmpJSON = {"type":"FeatureCollection", "features":[]}
+              for(let i in points){
+                resList.push(points[i])
+                if(points[i]){
+
+                  
+                  tmpKeys = Object.keys(points[i])
+                  // console.log(tmpKeys)
+                  resList.forEach(row=>{
+                    tmpProps = {}
+                    tmpKeys.forEach(key=>{
+                      // console.log(key)
+                      tmpProps[key] = row[key]
+                    })
+                    // console.log(row)
+                    
+                    // existingIds.push(row.ogc_fid)
+                    // console.log(existingIds,"cannot add")
+                    
+                    if (!existingIds.has(row.ogc_fid)){
+                        tmpJSON.features.push({
+                          "type":"Feature",
+                          "id":row.ogc_fid, 
+                          "properties": tmpProps,
+                          "geometry":row.wkb_geometry})
+                        existingIds.add(row.ogc_fid)
+                      }
+                    
+                    // console.log(tmpJSON)
+                    
+                  })
+                  // console.log(points[i])
+                  
+                }
+                
+              }
+              
+              socket.emit('pointssend', tmpJSON)
+
+            })
+        })
+
+        
           
           // let whereQuery = db.query(
           //     'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
@@ -297,6 +359,10 @@ db
 
           //   })
         })
+        socket.on('poly', tmpData=>{
+          console.log('received..', tmpData)
+          socket.emit('something', 'something2')
+         })
       })
   })
 // app.listen(process.env.PORT || 5000)

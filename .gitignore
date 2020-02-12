@@ -18653,3 +18653,8 @@ node_modules/graphql-iso-date/dist/utils/index.js
 node_modules/graphql-iso-date/dist/utils/index.js.flow
 node_modules/graphql-iso-date/dist/utils/validator.js
 node_modules/graphql-iso-date/dist/utils/validator.js.flow
+node_modules/node-version/azure-pipelines.yml
+node_modules/node-version/index.js
+node_modules/node-version/LICENSE
+node_modules/node-version/package.json
+node_modules/node-version/Readme.md
