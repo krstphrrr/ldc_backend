@@ -42,6 +42,9 @@ app.use((req, res, next)=>{
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH')
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization')
   res.setHeader('Access-Control-Allow-Credentials', true)
+  res.setHeader('set-cookie',[
+    'same-site-cookie=bar; SameSite=None; Secure'
+  ])
   next()
 })
 
@@ -81,6 +84,8 @@ const{ QueryTypes } = require('sequelize')
 
 // webserver set up + associating with socket
 db
+
+// the request thru socket does not use samesite cookie..
   .sync({logging:false})  
     .catch(err=>{
     console.log(err)
@@ -96,7 +101,6 @@ db
           let existingIds = new Set()
           let whereResults;
           let whereQuery = db.query(
-            
               'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
           + tmpData.bounds._southWest.lng + ', '  
           + tmpData.bounds._southWest.lat + ', ' 
@@ -359,9 +363,9 @@ db
 
           //   })
         })
-        socket.on('poly', tmpData=>{
+        socket.on('poly_bounds__sent', tmpData=>{
           console.log('received..', tmpData)
-          socket.emit('something', 'something2')
+          socket.emit('poly_geojson_cameback', 'something2')
          })
       })
   })
