@@ -94,12 +94,35 @@ db
       const io = require('./socket').init(server)
       io.on('connection', socket=>{
         console.log('connected!')
-        socket.on('test3',message=>console.log(message))
+        
 
         socket.on('fetchpoints', tmpData=>{
-          // tmpBounds
+          
+          console.log(tmpData.params)
           let existingIds = new Set()
           let whereResults;
+          // 
+          paramList = "SELECT "
+          let testList = ["one", "two","three", "four"]
+          for(let i in testList){
+            // if length is one: no comma
+            if(testList.length===1){
+              paramList+=`"${testList[i]}" `
+            // if is larger: comma after each
+            } else {
+              // until it reaches end of array! then no comma
+              if (i==testList.indexOf(testList[testList.length-1])){
+                paramList+=`"${testList[i]}" `
+              } else {
+                paramList+=`"${testList[i]}", `
+              }
+            }
+          }
+          
+          // let [a,b] = testList
+          //  let whereSelect = `SELECT ${}`
+          console.log(paramList)
+         
           let whereQuery = db.query(
               'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
           + tmpData.bounds._southWest.lng + ', '  
@@ -156,6 +179,7 @@ db
         })
 
         socket.on('onpublic', tmpData=>{
+          console.log('onpublic')
           let existingIds = new Set()
           let whereQ;
           if(tmpData.public===true){
@@ -259,7 +283,8 @@ db
           socket.on('fetchpoints', tmpData=>{
           // tmpBounds
           let existingIds = new Set()
-          let whereResults;
+
+
           let whereQuery = db.query(
               'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
           + tmpData.bounds._southWest.lng + ', '  
