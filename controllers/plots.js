@@ -110,7 +110,10 @@ exports.testGeo = (req, res, next)=>{
   let bounds = [-107.16613769531251, 32.06861044112201, -106.2975311279297, 32.57459147232343]
   let env = Sequelize.fn("ST_MakeEnvelope", ...bounds, 4326)
   let inter = Sequelize.fn("ST_Intersects", Sequelize.col("wkb_geometry"), env)
-  let fun_1 = Sequelize.fn("ST_AsGeoJSON", Sequelize.literal(' SELECT'+' "ogc_fid" '+ 'WHERE "PUBLIC"= \'true\''))
+  let lit = Sequelize.where(inter)
+  let lit3 = Sequelize.col("wkb_geometry")
+  let lit2 = Sequelize.fn('select',Sequelize.col("ogc_fid"), lit)
+  let fun_1 = Sequelize.fn("ST_AsGeoJSON", lit3)
   GeoInd.findAll({
     raw:true,
     logging:console.log,
@@ -119,8 +122,8 @@ exports.testGeo = (req, res, next)=>{
     attributes:[fun_1]
   })
     .then(result=>{
-      console.log(bounds)
-      console.log(result)
+      // console.log(bounds)
+      console.log(result[0])
     })
     .catch(err=>{
       console.log(err)
