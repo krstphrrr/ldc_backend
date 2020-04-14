@@ -54,7 +54,7 @@ app.use((req, res, next)=>{
 app.use('/auth', authRoutes)
 app.use('/api', feedRoutes)
 app.use('/', (req, res, next)=>{
-  res.send('<h1>Landscape Data Commons v.2 </h1><p style="color:blue;">Listening for queries...</p>')
+  res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
 });
 
 // model relationships!
