@@ -1,9 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-// get rid of
-// const { GraphQLSchema } = require('graphql');
-const graphqlHttp = require('express-graphql')
 
 
 // routes + sequelize 
@@ -27,18 +24,12 @@ db.authenticate()
 const app = express();
 
 
-
-
-
-
-
-
 app.use(bodyParser.json()) //app/json headerss
 
 
 // headers for cross origin resource sharing errors!
 app.use((req, res, next)=>{
-  res.setHeader('Access-Control-Allow-Origin','http://localhost:4200')
+  res.setHeader('Access-Control-Allow-Origin','http://localhost:4200','http://new.landscapedatacommons.org')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH')
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization')
   res.setHeader('Access-Control-Allow-Credentials', true)
@@ -52,8 +43,8 @@ app.use((req, res, next)=>{
 
 // routes (controllers within)
 app.use('/auth', authRoutes)
-app.use('/api', feedRoutes)
-app.use('/', (req, res, next)=>{
+// app.use('/api', feedRoutes)
+app.use('/api', (req, res, next)=>{
   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
 });
 
