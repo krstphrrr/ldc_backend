@@ -48,10 +48,10 @@ app.use('/api', (req, res, next)=>{
   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
 });
 
-// app.use('/', (req, res, next)=>{
-//   // console.log('localhost @ port was hit')
-//   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
-// });
+app.use('/', (req, res, next)=>{
+  console.log('localhost @ port was hit')
+  res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
+});
 
 // model relationships!
 Header.hasMany(GeoInd, {
@@ -90,7 +90,7 @@ db
   }).then(result =>{
       const server = app.listen(process.env.PORT || 5000)
       const io = require('./socket').init(server)
-      // console.log(io)
+      console.log(io)
       io.on('connection', socket=>{
         
         // console.log(socket)
