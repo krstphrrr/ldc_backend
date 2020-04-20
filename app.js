@@ -48,6 +48,10 @@ app.use('/api', (req, res, next)=>{
   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
 });
 
+app.use('/', (req, res, next)=>{
+  res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
+});
+
 // model relationships!
 Header.hasMany(GeoInd, {
   foreignKey: "PrimaryKey"
