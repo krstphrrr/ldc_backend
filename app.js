@@ -48,9 +48,10 @@ app.use('/api', (req, res, next)=>{
   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
 });
 
-app.use('/', (req, res, next)=>{
-  res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
-});
+// app.use('/', (req, res, next)=>{
+//   // console.log('localhost @ port was hit')
+//   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
+// });
 
 // model relationships!
 Header.hasMany(GeoInd, {
@@ -89,7 +90,12 @@ db
   }).then(result =>{
       const server = app.listen(process.env.PORT || 5000)
       const io = require('./socket').init(server)
+      // console.log(io)
       io.on('connection', socket=>{
+        // socket.nsp = {
+        //   path:'/ws_website2'
+        // }
+        console.log(socket)
         // old code
 
         ////////////////////////////////////////
@@ -99,7 +105,9 @@ db
         
 
         socket.on('fetchpoints', tmpData=>{
-          
+          // socket.io.opts = {
+          //   path : '/ws_website2'
+          // }
           console.log(tmpData.params)
           let existingIds = new Set()
           let whereResults;
