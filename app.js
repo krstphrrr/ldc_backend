@@ -92,10 +92,8 @@ db
       const io = require('./socket').init(server)
       // console.log(io)
       io.on('connection', socket=>{
-        // socket.nsp = {
-        //   path:'/ws_website2'
-        // }
-        console.log(socket)
+        
+        // console.log(socket)
         // old code
 
         ////////////////////////////////////////
