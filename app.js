@@ -92,16 +92,9 @@ db
       const io = require('./socket').init(server)
       // console.log(io)
       io.on('connection', socket=>{
-        
-        console.log(socket)
-        // old code
-
-        ////////////////////////////////////////
-
 
         console.log('connected!')
-        
-
+      
         socket.on('fetchpoints', tmpData=>{
           // socket.io.opts = {
           //   path : '/ws_website2'
@@ -184,6 +177,102 @@ db
               socket.emit('pointssend', tmpJSON)
 
             })
+        })
+
+        socket.on('drawing', tmpData=>{
+          let existingIds = new Set()
+          let whereResults;
+          // 
+          let paramList = 'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakePolygon(ST_SetSRID(\'LINESTRING('
+          let subParams = ''
+          let startPoint = ''
+          for(let i in tmpData){
+            // if length is one: no comma
+            if(tmpData.length===1){
+              for(let j in tmpData[i]){
+                subParams+=tmpData[i][j]
+              }
+              paramList+=`${subParams} `
+              
+              subParams = ''
+            // if is larger: comma after each
+            } else {
+              //getting start point//
+              if (i==0){
+                for(let j in tmpData[i]){
+ 
+                  if(j==tmpData[i].indexOf(tmpData[i][tmpData[i].length-1])){
+                    subParams+=`${tmpData[i][j]} `
+                  } else {
+                    subParams+=`${tmpData[i][j]} `
+                  }                
+                }
+                startPoint+=`${subParams} `
+                subParams = ''
+              }
+              //else capture the rest: if its large add comma to each appended coordset, except for the last
+              if (i==tmpData.indexOf(tmpData[tmpData.length-1])){
+                for(let j in tmpData[i]){
+ 
+                  if(j==tmpData[i].indexOf(tmpData[i][tmpData[i].length-1])){
+                    subParams+=`${tmpData[i][j]} `
+                  } else {
+                    subParams+=`${tmpData[i][j]} `
+                  }                
+                }
+                paramList+=`${subParams}`
+                subParams = ''
+              } else {
+                for(let j in tmpData[i]){
+                  if(j==tmpData[i].indexOf(tmpData[i][tmpData[i].length-1])){
+                    subParams+=`${tmpData[i][j]} `
+                  } else {
+                    subParams+=`${tmpData[i][j]} `
+                  } 
+                }
+                paramList+=`${subParams}, `
+                subParams = ''
+                // paramList+=`"${tmpData[i]}", `
+              }
+            }
+          }
+          paramList+=`)\'::geometry, 4326))) = 't';`
+          let whereQuery = db.query(paramList,{
+            nest:true,
+            logging:console.log,
+            type:QueryTypes.SELECT,
+            raw:true
+          }).then(points=>{
+            let resList = []
+            let tmpKeys
+            let tmpJSON = {"type":"FeatureCollection", "features":[]}
+            for(let i in points){
+              resList.push(points[i])
+              if(points[i]){
+
+
+                tmpKeys = Object.keys(points[i])
+                resList.forEach(row=>{
+                  tmpProps = {}
+                  tmpKeys.forEach(key=>{
+                    tmpProps[key] = row[key]
+                  })
+                  if (!existingIds.has(row.ogc_fid)){
+                      tmpJSON.features.push({
+                        "type":"Feature",
+                        "id":row.ogc_fid, 
+                        "properties": tmpProps,
+                        "geometry":row.wkb_geometry})
+                      existingIds.add(row.ogc_fid)
+                    }
+                })
+              }
+              
+            }
+            
+            socket.emit('pointssend', tmpJSON)
+          })
+          // console.log(paramList)
         })
 
         socket.on('onpublic', tmpData=>{
