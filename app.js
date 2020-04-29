@@ -99,7 +99,7 @@ db
           // socket.io.opts = {
           //   path : '/ws_website2'
           // }
-          console.log(tmpData.params)
+          // console.log(tmpData.params)
           let existingIds = new Set()
           let whereResults;
           // 
@@ -129,7 +129,7 @@ db
           + tmpData.bounds._southWest.lng + ', '  
           + tmpData.bounds._southWest.lat + ', ' 
           + tmpData.bounds._northEast.lng + ', ' 
-          + tmpData.bounds._northEast.lat + ", 4326)) = 't' AND \"Public\"= true;",{
+          + tmpData.bounds._northEast.lat + ", 4326)) = 't'",{
               nest:true,
               logging:console.log,
               type:QueryTypes.SELECT,
