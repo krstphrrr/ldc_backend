@@ -29,7 +29,7 @@ app.use(bodyParser.json()) //app/json headerss
 
 // headers for cross origin resource sharing errors!
 app.use((req, res, next)=>{
-  res.setHeader('Access-Control-Allow-Origin','http://localhost:4200','http://new.landscapedatacommons.org')
+  res.setHeader('Access-Control-Allow-Origin','http://localhost:4200','https://landscapedatacommons.org')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH')
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization')
   res.setHeader('Access-Control-Allow-Credentials', true)
