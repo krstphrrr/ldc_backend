@@ -275,119 +275,26 @@ db
           // console.log(paramList)
         })
 
-        socket.on('onpublic', tmpData=>{
-          console.log('onpublic')
+        socket.on('fetchpublic', tmpData=>{
           let existingIds = new Set()
-          let whereQ;
-          if(tmpData.public===true){
-            whereQ = "AND \"Public\"= true;"
-            let whereQuery = db.query(
-              'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
-          + tmpData.bounds._southWest.lng + ', '  
-          + tmpData.bounds._southWest.lat + ', ' 
-          + tmpData.bounds._northEast.lng + ', ' 
-          + tmpData.bounds._northEast.lat + ", 4326)) = 't'"+whereQ,{
-              nest:true,
-              logging:console.log,
-              type:QueryTypes.SELECT,
-              raw:true
-            }).then(points=>{
-              let resList = []
-              let tmpKeys
-              let tmpJSON = {"type":"FeatureCollection", "features":[]}
-              for(let i in points){
-                resList.push(points[i])
-                if(points[i]){
-
-                  
-                  tmpKeys = Object.keys(points[i])
-                  resList.forEach(row=>{
-                    tmpProps = {}
-                    tmpKeys.forEach(key=>{
-                      tmpProps[key] = row[key]
-                    })
-                    // console.log(row)
-                    if (!existingIds.has(row.ogc_fid)){
-                      let fuzzPoint = {'type':'Point', 'coordinates':[]}
-                      let ranCoord = (Math.random()*0.01)
-                      let fuzzLng = (row.wkb_geometry.coordinates[0]+ranCoord)
-                      let fuzzLat = (row.wkb_geometry.coordinates[1]+ranCoord)
-                      
-                      console.log(fuzzPoint)
-                      // console.log(row.wkb_geometry.coordinates, [fuzzLng, fuzzLat])
-                      if(row.Public===false){
-                        // push new fuzzed coords into geometry object
-                      }
-                      // console.log(fuzzPoint)
-                      tmpJSON.features.push({
-                        "type":"Feature",
-                        "id":row.ogc_fid, 
-                        "properties": tmpProps,
-                        "geometry":row.wkb_geometry})
-                      existingIds.add(row.ogc_fid)
-                    }
-                    // console.log(tmpJSON.features)
-                  })
-                }
-              }
-              socket.emit('pointssend', tmpJSON)
-
-            })
-            // console.log(tmpData)
-          } else {
-            whereQ = ";"
-            let whereQuery = db.query(
-              'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
-          + tmpData.bounds._southWest.lng + ', '  
-          + tmpData.bounds._southWest.lat + ', ' 
-          + tmpData.bounds._northEast.lng + ', ' 
-          + tmpData.bounds._northEast.lat + ", 4326)) = 't'"+whereQ,{
-              nest:true,
-              logging:console.log,
-              type:QueryTypes.SELECT,
-              raw:true
-            }).then(points=>{
-              let resList = []
-              let tmpKeys
-              let tmpJSON = {"type":"FeatureCollection", "features":[]}
-              for(let i in points){
-                resList.push(points[i])
-                if(points[i]){
-                  tmpKeys = Object.keys(points[i])
-                  resList.forEach(row=>{
-                    tmpProps = {}
-                    tmpKeys.forEach(key=>{
-                      tmpProps[key] = row[key]
-                    })
-                    // console.log(row)
-                    if (!existingIds.has(row.ogc_fid)){
-                      tmpJSON.features.push({
-                        "type":"Feature",
-                        "id":row.ogc_fid, 
-                        "properties": tmpProps,
-                        "geometry":row.wkb_geometry})
-                      existingIds.add(row.ogc_fid)
-                    }
-                    // console.log(tmpJSON)
-                  })
-                }
-              }
-              socket.emit('pointssend', tmpJSON)
-
-            })
+          // console.log(tmpData.param)
+          let choice;
+          let wherePubtrue = ", 4326)) = 't' AND \"Public\"=true; "
+          let wherePubfalse = ", 4326)) = 't'"
+          if(tmpData.param.public===true){
+            choice = wherePubtrue
+            // console.log(choice)
+          } else if (tmpData.param.public===false){
+            choice = wherePubfalse
+            // console.log(choice)
           }
-
-          socket.on('fetchpoints', tmpData=>{
-          // tmpBounds
-          let existingIds = new Set()
-
-
+         
           let whereQuery = db.query(
               'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
           + tmpData.bounds._southWest.lng + ', '  
           + tmpData.bounds._southWest.lat + ', ' 
           + tmpData.bounds._northEast.lng + ', ' 
-          + tmpData.bounds._northEast.lat + ", 4326)) = 't' AND \"Public\"= true;",{
+          + tmpData.bounds._northEast.lat + choice,{
               nest:true,
               logging:console.log,
               type:QueryTypes.SELECT,
@@ -435,8 +342,6 @@ db
               socket.emit('pointssend', tmpJSON)
 
             })
-        })
-
         })
         socket.on('poly_bounds__sent', tmpData=>{
           console.log('received..', tmpData)
