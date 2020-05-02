@@ -123,7 +123,9 @@ db
           // let [a,b] = testList
           //  let whereSelect = `SELECT ${}`
           console.log(paramList)
-         
+         //(float xmin, float ymin, float xmax, float ymax, integer srid=unknown);
+
+         // xmin
           let whereQuery = db.query(
               'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakeEnvelope(' 
           + tmpData.bounds._southWest.lng + ', '  
@@ -276,6 +278,7 @@ db
         })
 
         socket.on('fetchpublic', tmpData=>{
+
           let existingIds = new Set()
           // console.log(tmpData.param)
           let choice;
@@ -343,9 +346,21 @@ db
 
             })
         })
-        socket.on('poly_bounds__sent', tmpData=>{
-          console.log('received..', tmpData)
-          socket.emit('poly_geojson_cameback', 'something2')
+        socket.on('fetchpublic2', tmpData=>{
+
+          db.query(`select * from test_geojson(${tmpData.param.public},
+            ${tmpData.bounds._southWest.lng},
+            ${tmpData.bounds._southWest.lat},
+            ${tmpData.bounds._northEast.lng},
+            ${tmpData.bounds._northEast.lat})`,{
+            nest:true,
+            logging:console.log,
+            type:QueryTypes.SELECT,
+            raw:true
+          }).then(points=>{
+            let geojsonobj = points[0].test_geojson
+            socket.emit('pointssend',geojsonobj)
+          })
          })
       })
   })
