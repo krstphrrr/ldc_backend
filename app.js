@@ -185,7 +185,7 @@ db
           let existingIds = new Set()
           let whereResults;
           // 
-          let paramList = 'SELECT "ogc_fid", "Public", "wkb_geometry" from "geoIndicators" a WHERE ST_Intersects(a.wkb_geometry, ST_MakePolygon(ST_SetSRID(\'LINESTRING('
+          let paramList = ''
           let subParams = ''
           let startPoint = ''
           for(let i in tmpData){
@@ -238,41 +238,20 @@ db
               }
             }
           }
-          paramList+=`)\'::geometry, 4326))) = 't';`
-          let whereQuery = db.query(paramList,{
+          console.log(paramList)
+
+
+
+          
+          let whereQuery = db.query(`select * from geojson_polygon(true,'${paramList}')`,{
             nest:true,
             logging:console.log,
             type:QueryTypes.SELECT,
             raw:true
           }).then(points=>{
-            let resList = []
-            let tmpKeys
-            let tmpJSON = {"type":"FeatureCollection", "features":[]}
-            for(let i in points){
-              resList.push(points[i])
-              if(points[i]){
-
-
-                tmpKeys = Object.keys(points[i])
-                resList.forEach(row=>{
-                  tmpProps = {}
-                  tmpKeys.forEach(key=>{
-                    tmpProps[key] = row[key]
-                  })
-                  if (!existingIds.has(row.ogc_fid)){
-                      tmpJSON.features.push({
-                        "type":"Feature",
-                        "id":row.ogc_fid, 
-                        "properties": tmpProps,
-                        "geometry":row.wkb_geometry})
-                      existingIds.add(row.ogc_fid)
-                    }
-                })
-              }
-              
-            }
-            
-            socket.emit('pointssend', tmpJSON)
+            // console.log(points[0])
+            let geojsonobj = points[0].geojson_polygon
+            socket.emit('pointssend',geojsonobj)
           })
           // console.log(paramList)
         })
