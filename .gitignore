@@ -18904,3 +18904,4 @@ node_modules/validator/lib/isBase32.js
 node_modules/validator/lib/isBIC.js
 node_modules/validator/lib/isOctal.js
 node_modules/validator/lib/isSlug.js
+node.env

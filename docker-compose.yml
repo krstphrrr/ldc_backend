@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  webserver:
+    image: ng_test
+    ports:
+      - 4200:80
+  backend:
+    image: socketapi
+    ports:
+      - 5001:5000
+    env_file: 
+      - node.env
