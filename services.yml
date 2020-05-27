@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  webserver:
+    image: ng_test
+    ports:
+      - 4200:80
+    networks:
+      - mifrontend
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+        delay: 100s
+      restart_policy: 
+        condition: on-failure
+  backend:
+    image: socketapi
+    ports:
+      - 5001:5000
+    env_file: 
+      - node.env
+    networks:
+      - mifrontend
+    secrets:
+      - dbstr
+    environment:
+      DBSTR: /run/secrets/dbstr
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+        delay: 100s
+      restart_policy:
+        condition: on-failure
+networks:
+  mifrontend:
+secrets:
+  dbstr:
+    file: ./config/dbstr.txt
+

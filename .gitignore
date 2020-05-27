@@ -18905,3 +18905,5 @@ node_modules/validator/lib/isBIC.js
 node_modules/validator/lib/isOctal.js
 node_modules/validator/lib/isSlug.js
 node.env
+
+config/dbstr.txt

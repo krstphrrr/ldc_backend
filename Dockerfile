@@ -1,6 +1,6 @@
 # IMAGE 1: setup node
 # FROM node:alpine
-from alpine
+FROM alpine
 
 RUN apk update \
     && apk add nodejs \
@@ -15,7 +15,7 @@ COPY . ./
 # installing dependencies
 RUN npm install
 
-# building angular
+# exposing port currently not working
 EXPOSE 5000
 
 CMD ["npm", "start"]
