@@ -7,6 +7,6 @@ services:
   backend:
     image: socketapi
     ports:
-      - 5001:5000
+      - 5000:5000
     env_file: 
       - node.env
