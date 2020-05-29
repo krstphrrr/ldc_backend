@@ -1,3 +1,5 @@
+# check out compose context to deploy in different places
+
 version: "3.8"
 services:
   webserver:
@@ -16,7 +18,7 @@ services:
   backend:
     image: socketapi
     ports:
-      - 5001:5000
+      - 5000:5000
     env_file: 
       - node.env
     networks:
