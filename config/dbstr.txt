@@ -1,0 +1,1 @@
+postgresql://kris:LDC@1912!@jornada-ldc2.jrn.nmsu.edu:5432/gisdb
