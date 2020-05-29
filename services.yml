@@ -19,8 +19,6 @@ services:
     image: socketapi
     ports:
       - 5000:5000
-    env_file: 
-      - node.env
     networks:
       - mifrontend
     secrets:
