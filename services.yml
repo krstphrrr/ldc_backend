@@ -19,12 +19,15 @@ services:
     image: socketapi
     ports:
       - 5000:5000
+    env_file: 
+      - node.env
+  
     networks:
       - mifrontend
-    environment:
-      DBSTR: /run/secrets/dbstr
-    secrets:
-      - dbstr
+    # environment:
+    #   DBSTR: /run/secrets/dbstr
+    # secrets:
+    #   - dbstr
     deploy:
       replicas: 2
       update_config:
@@ -34,7 +37,7 @@ services:
         condition: on-failure
 networks:
   mifrontend:
-secrets:
-  dbstr:
-    file: ./config/dbstr.txt
+# secrets:
+#   dbstr:
+#     file: ./config/dbstr.txt
 
