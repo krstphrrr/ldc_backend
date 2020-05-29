@@ -4,16 +4,16 @@ const cors = require('cors')
 
 
 // routes + sequelize 
-const feedRoutes = require('./routes/feed')
-const authRoutes = require('./routes/auth')
+// const feedRoutes = require('./routes/feed')
+// const authRoutes = require('./routes/auth')
 const db = require('./config/database')
 
 
 
 //models
-const Header = require('./models/dataHeader')
-const GeoInd = require('./models/geoIndicators')
-const GeoSpe = require('./models/geoSpecies')
+// const Header = require('./models/dataHeader')
+// const GeoInd = require('./models/geoIndicators')
+// const GeoSpe = require('./models/geoSpecies')
 
 // // sequelize set up
 db.authenticate()
@@ -29,7 +29,7 @@ app.use(bodyParser.json()) //app/json headerss
 
 // headers for cross origin resource sharing errors!
 app.use((req, res, next)=>{
-  res.setHeader('Access-Control-Allow-Origin','http://localhost:4200','https://landscapedatacommons.org')
+  res.setHeader('Access-Control-Allow-Origin','http://localhost:4200','https://landscapedatacommons.org', 'https://test.landscapedatacommons.org')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH')
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization')
   res.setHeader('Access-Control-Allow-Credentials', true)
@@ -42,7 +42,7 @@ app.use((req, res, next)=>{
 
 
 // routes (controllers within)
-app.use('/auth', authRoutes)
+// app.use('/auth', authRoutes)
 // app.use('/api', feedRoutes)
 app.use('/api', (req, res, next)=>{
   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
@@ -54,29 +54,29 @@ app.use('/api', (req, res, next)=>{
 // });
 
 // model relationships!
-Header.hasMany(GeoInd, {
-  foreignKey: "PrimaryKey"
-})
-GeoInd.belongsTo(Header,{
-  foreignKey: "PrimaryKey"
-})
+// Header.hasMany(GeoInd, {
+//   foreignKey: "PrimaryKey"
+// })
+// GeoInd.belongsTo(Header,{
+//   foreignKey: "PrimaryKey"
+// })
 
-Header.hasMany(GeoSpe,{
-  foreignKey: "PrimaryKey"
-})
-GeoSpe.belongsTo(Header,{
-  foreignKey: "PrimaryKey"
-})
+// Header.hasMany(GeoSpe,{
+//   foreignKey: "PrimaryKey"
+// })
+// GeoSpe.belongsTo(Header,{
+//   foreignKey: "PrimaryKey"
+// })
 
 
 // error handler
-app.use((error, req, res, next) => {
-  console.log(error)
-  const status = error.statusCode || 500;
-  const message = error.message 
-  const data = error.data 
-  res.status(status).json({message:message, data:data})
-})
+// app.use((error, req, res, next) => {
+//   console.log(error)
+//   const status = error.statusCode || 500;
+//   const message = error.message 
+//   const data = error.data 
+//   res.status(status).json({message:message, data:data})
+// })
 
 
 const{ QueryTypes } = require('sequelize')
