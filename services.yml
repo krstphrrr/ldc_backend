@@ -1,4 +1,4 @@
-# check out compose context to deploy in different places
+# 
 
 version: "3.8"
 services:
@@ -6,8 +6,8 @@ services:
     image: ng_test
     ports:
       - 4200:80
-    # networks:
-    #   - mifrontend
+    networks:
+      - mifrontend
     deploy:
       replicas: 2
       update_config:
@@ -22,8 +22,8 @@ services:
     env_file: 
       - node.env
   
-    # networks:
-    #   - mifrontend
+    networks:
+      - mifrontend
     # environment:
     #   DBSTR: /run/secrets/dbstr
     # secrets:
@@ -35,8 +35,8 @@ services:
         delay: 100s
       restart_policy:
         condition: on-failure
-# networks:
-#   mifrontend:
+networks:
+  mifrontend:
 # secrets:
 #   dbstr:
 #     file: ./config/dbstr.txt
