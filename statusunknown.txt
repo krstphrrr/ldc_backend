@@ -1,0 +1,33 @@
+Request URL: https://landscapedatacommons.org/ws2/?EIO=3&transport=polling&t=N9fPNv5&sid=iBY_SZqq0BDXDiVpAAAd
+Request Method: POST
+Status Code: 400 Bad Request
+Remote Address: 128.123.177.184:443
+Referrer Policy: no-referrer-when-downgrade
+
+response:
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Origin: https://landscapedatacommons.org
+Connection: close
+Content-Type: application/json
+Date: Sun, 31 May 2020 06:22:18 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+
+request:
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+Connection: keep-alive
+Content-Length: 3
+Content-type: text/plain;charset=UTF-8
+Cookie: same-site-cookie=bar; _ga=GA1.2.126952682.1575301518; same-site-cookie=bar; io=8hf4mA4Z1afUBnDLAAAw
+Host: landscapedatacommons.org
+Origin: https://landscapedatacommons.org
+Referer: https://landscapedatacommons.org/
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36

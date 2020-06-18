@@ -3,9 +3,6 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 
-// routes + sequelize 
-// const feedRoutes = require('./routes/feed')
-// const authRoutes = require('./routes/auth')
 const db = require('./config/database')
 
 
@@ -53,20 +50,6 @@ app.use('/api', (req, res, next)=>{
 //   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
 // });
 
-// model relationships!
-// Header.hasMany(GeoInd, {
-//   foreignKey: "PrimaryKey"
-// })
-// GeoInd.belongsTo(Header,{
-//   foreignKey: "PrimaryKey"
-// })
-
-// Header.hasMany(GeoSpe,{
-//   foreignKey: "PrimaryKey"
-// })
-// GeoSpe.belongsTo(Header,{
-//   foreignKey: "PrimaryKey"
-// })
 
 
 // error handler

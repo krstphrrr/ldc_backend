@@ -22,5 +22,5 @@ CMD ["npm", "start"]
 
 # commands:
 # docker image build -t socketapi .
-# docker container run --rm --name socket -p 5001:5000 socketapi
+# docker container run --rm --name socket --env-file node.env -p 5000:5000 socketapi
 # docker container stop socket
