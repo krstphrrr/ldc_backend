@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
-
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +20,7 @@
     "express-validator": "^6.4.0",
     "graphql-geojson": "^1.0.0",
     "graphql-iso-date": "^3.6.1",
+    "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.0",
     "node-version": "^2.0.0",

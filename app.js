@@ -1,8 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const helmet = require('helmet')
 
 
+// routes + sequelize 
+// const feedRoutes = require('./routes/feed')
+// const authRoutes = require('./routes/auth')
 const db = require('./config/database')
 
 
@@ -22,20 +26,8 @@ const app = express();
 
 
 app.use(bodyParser.json()) //app/json headerss
-
-
-// headers for cross origin resource sharing errors!
-app.use((req, res, next)=>{
-  res.setHeader('Access-Control-Allow-Origin','http://localhost:4200','https://landscapedatacommons.org', 'https://test.landscapedatacommons.org')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH')
-  res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization')
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('set-cookie',[
-    'same-site-cookie=bar; SameSite=None; Secure'
-  ])
-  next()
-})
-
+app.use(helmet())
+app.use(cors())
 
 
 // routes (controllers within)
@@ -50,6 +42,20 @@ app.use('/api', (req, res, next)=>{
 //   res.send('<h1>LDC node server v.2 up!</h1><p style="color:blue;">Listening for queries...</p>')
 // });
 
+// model relationships!
+// Header.hasMany(GeoInd, {
+//   foreignKey: "PrimaryKey"
+// })
+// GeoInd.belongsTo(Header,{
+//   foreignKey: "PrimaryKey"
+// })
+
+// Header.hasMany(GeoSpe,{
+//   foreignKey: "PrimaryKey"
+// })
+// GeoSpe.belongsTo(Header,{
+//   foreignKey: "PrimaryKey"
+// })
 
 
 // error handler
