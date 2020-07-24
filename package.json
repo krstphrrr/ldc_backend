@@ -11,25 +11,20 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "express-graphql": "^0.9.0",
-    "express-jwt": "^5.3.3",
-    "express-validator": "^6.4.0",
     "graphql-geojson": "^1.0.0",
     "graphql-iso-date": "^3.6.1",
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.8.0",
     "node-version": "^2.0.0",
     "pg": "^7.18.2",
-    "sequelize": "^5.21.7",
+    "sequelize": "^5.22.3",
     "sequelize-graphql-schema": "^0.1.71",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.4"
   }
 }
